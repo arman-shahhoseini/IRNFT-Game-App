@@ -1,0 +1,578 @@
+/* styles.css */
+body {
+    margin: 0;
+    font-family: 'Space Grotesk', sans-serif;
+    background: #121212;
+    color: #eaeaea;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  /* Login overlay */
+.login-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(18, 18, 18, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  /* Login container */
+  .login-container {
+    background-color: #121212;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 255, 209, 0.7);
+    padding: 20px 30px;
+    text-align: center;
+    width: 350px;
+    max-width: 90%;
+    color: #00ffd1;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  
+  .login-container h2 {
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+  
+  /* Input fields */
+  .login-input {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #00ffd1;
+    border-radius: 5px;
+    background-color: #121212;
+    color: #eaeaea;
+    font-size: 16px;
+  }
+  
+  .login-input:focus {
+    outline: none;
+    box-shadow: 0 0 8px rgba(0, 255, 209, 0.8);
+  }
+  
+  /* Login button */
+  .login-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #00ffd1;
+    color: #121212;
+    border: none;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .login-btn:hover {
+    background-color: #00e6bf;
+  }
+  
+  /* Error or success message */
+  .login-message {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #ff007a;
+  }
+  
+
+
+  .app-header {
+    position: relative;
+    background-image: url("appheader_bg.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    text-align: center;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid #333;
+    overflow: hidden; 
+}
+
+.app-header::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    z-index: 1; /* لایه پایین‌تر */
+  }  
+
+.app-header h1, .app-header p {
+    position: relative;
+    z-index: 2; 
+}
+
+  
+  .app-header h1 {
+    font-size: 2.5rem;
+    color: #00ffd1;
+    letter-spacing: 1px;
+  }
+
+  /* Logo and Header Styling */
+.logo-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .app-logo {
+    width: 350px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  
+  .connect-wallet-btn {
+    background: #00ffd1;
+    color: #121212;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .connect-wallet-btn {
+    position: relative;
+    z-index: 10; /* عددی بالاتر از لایه‌های دیگر */
+    background: #00ffd1;
+    color: #121212;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .connect-wallet-btn:hover {
+    background: #ff007a;
+    color: #fff;
+    transform: scale(1.1);
+  }
+  
+  
+  main {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+  }
+  
+  .page {
+    display: none;
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  .page.active {
+    display: block;
+  }
+  
+  .bottom-nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #1a1a1a;
+    border-top: 1px solid #333;
+    padding: 0.75rem 0;
+  }
+  
+  .nav-item {
+    flex: 1;
+    text-align: center;
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: 1rem;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .nav-item i {
+    display: block;
+    font-size: 1.75rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .nav-item:hover {
+    color: #00ffd1;
+    transform: scale(1.1);
+  }
+  
+  .nav-item.active {
+    color: #ff007a;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Coin Counter */
+.coin-counter {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #1a1a1a;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    color: #00ffd1;
+    font-size: 1.2rem;
+  }
+  
+  .coin-counter i {
+    font-size: 1.5rem;
+  }
+  
+ /* Task List */
+.task-list {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+    margin-bottom: 60px;
+  }
+  
+  .task-item {  /* Updated class name to match the HTML */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    margin: 0.5rem 0;
+    background: #1a1a1a;
+    border-radius: 10px;
+    border: 1px solid #333;
+  }
+  
+  .task-item span {  /* Updated to target the correct element */
+    color: #eaeaea;
+    font-size: 1rem;
+  }
+  
+  .complete-task-btn {  /* Updated class name to match the HTML */
+    background: #00ffd1;
+    color: #121212;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .complete-task-btn:hover {  /* Updated to match button class */
+    background: #ff007a;
+    color: #fff;
+  }
+  
+
+  /* Section Styling */
+.shop-section {
+    margin: 2rem 0;
+    padding: 1rem;
+    background: #141414;
+    border-radius: 10px;
+    border: 1px solid #333;
+  }
+  
+  .shop-title {
+    color: #00ffd1;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  
+  /* NFT Grid Styling */
+  .shop-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 60px;
+  }
+  
+  /* NFT Cards */
+  .nft-card {
+    background: #1a1a1a;
+    padding: 1rem;
+    border-radius: 10px;
+    text-align: center;
+    border: 1px solid #444;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  
+  .nft-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .nft-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 0.5rem;
+  }
+  
+  .nft-card h3 {
+    color: #eaeaea;
+    font-size: 1rem;
+    margin: 0.5rem 0;
+  }
+  
+  .nft-card p {
+    color: #00ffd1;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .buy-btn {
+    background: #00ffd1;
+    color: #121212;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .buy-btn:hover {
+    background: #ff007a;
+    color: #fff;
+  }
+  
+  /* Rare and Legendary Specific Styles */
+  .rare .nft-card {
+    border: 2px solid #00ffd1;
+  }
+  
+  .legendary .nft-card {
+    border: 2px solid #ff007a;
+  }
+  
+  /* Enhanced Level Selector Styling */
+.level-selection {
+    text-align: center;
+    margin: 1rem 0;
+  }
+  
+  .level-selection label {
+    color: #00ffd1;
+    font-size: 1.2rem;
+    margin-right: 0.5rem;
+  }
+  
+  .level-selection select {
+    padding: 0.5rem;
+    font-size: 1rem;
+    color: #121212;
+    background: #00ffd1;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+  }
+  
+  .level-selection select:hover {
+    background: #ff007a;
+    color: #fff;
+  }
+  
+  /* Improved Collection Section */
+  .collection {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: #141414;
+    border-radius: 10px;
+  }
+  
+  .collection h3 {
+    color: #00ffd1;
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .collection-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 60px;
+  }
+  
+  .collection-item {
+    background: #1a1a1a;
+    padding: 1rem;
+    border-radius: 10px;
+    text-align: center;
+    border: 1px solid #444;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  
+  .collection-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .collection-item img {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 0.5rem;
+  }
+  
+  .collection-item h4 {
+    color: #eaeaea;
+    font-size: 1rem;
+  }
+  
+  /* Message Box Enhancements */
+  .message-box {
+    text-align: center;
+    margin: 1rem auto;
+    padding: 1rem;
+    border-radius: 10px;
+    display: none;
+  }
+  
+  .message-box.show {
+    display: block;
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  .message-box.success {
+    background: #d4edda;
+    color: #155724;
+  }
+  
+  .message-box.error {
+    background: #f8d7da;
+    color: #721c24;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* General Game Section Styling */
+/* بخش Coming Soon */
+#games {
+    padding: 20px;
+    background: #1e1e1e;
+    border-radius: 10px;
+    margin-top: 20px;
+    text-align: center;
+    color: #eaeaea;
+    margin-bottom: 60px;
+  }
+  
+  .coming-soon-container {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  .coming-soon-title {
+    font-size: 2.5rem;
+    color: #00ffd1;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+  }
+  
+  .coming-soon-message {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    color: #aaa;
+  }
+  
+  .countdown-timer {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+  
+  .timer-box {
+    background: #333;
+    border-radius: 10px;
+    padding: 15px;
+    color: #fff;
+    text-align: center;
+  }
+  
+  .timer {
+    font-size: 2rem;
+    font-weight: bold;
+    display: block;
+  }
+  
+  .timer p {
+    font-size: 1rem;
+    color: #bbb;
+    margin-top: 5px;
+  }
+  
+  .subscribe-container {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .email-input {
+    padding: 10px;
+    width: 80%;
+    margin-bottom: 15px;
+    border: 1px solid #333;
+    border-radius: 10px;
+    background: #222;
+    color: #eaeaea;
+    font-size: 1rem;
+  }
+  
+  .notify-btn {
+    padding: 12px 25px;
+    background: #00ffd1;
+    color: #121212;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .notify-btn:hover {
+    background: #ff007a;
+    color: #fff;
+    transform: scale(1.05);
+  }
+  

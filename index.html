@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IRNFT Game App</title>
+  <link rel="icon" href="i.png">
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script defer src="script.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider/dist/umd/index.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+</head>
+<body>
+    <div id="login-box" class="login-overlay">
+        <div class="login-container">
+          <h2>Login</h2>
+          <form id="login-form">
+            <input type="text" id="username" class="login-input" placeholder="Username" required />
+            <input type="password" id="password" class="login-input" placeholder="Password" required />
+            <button type="submit" class="login-btn">Login</button>
+            <p id="login-message" class="login-message"></p>
+          </form>
+        </div>
+      </div>
+      
+  <div id="app">
+    <!-- Header -->
+    <header class="app-header">
+        <div class="logo-section">
+          <img src="logo.png" alt="IRNFT Logo" class="app-logo" />
+        </div>
+        <button id="connect-wallet-btn" class="connect-wallet-btn">Connect Wallet</button>
+      </header>
+      
+    <!-- Main Content -->
+    <main>
+        <section id="tasks" class="page active">
+            <div class="task-header">
+                <h2>Tasks</h2>
+                <div class="coin-counter">
+                    <i class="fa fa-coins"></i>
+                    <span id="coin-count">0</span>
+                </div>
+            </div>
+            <ul id="task-container" class="task-list">
+                <li class="task-item" data-coins="10">
+                    <span>Complete Daily Check-in</span>
+                    <button class="complete-task-btn">+10 Coins</button>
+                </li>
+                <li class="task-item" data-coins="20">
+                    <span>Win a Game</span>
+                    <button class="complete-task-btn">+20 Coins</button>
+                </li>
+                <li class="task-item" data-coins="30">
+                    <span>Refer a Friend</span>
+                    <button class="complete-task-btn">+30 Coins</button>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Games Section with Coming Soon Timer -->
+        <section id="games" class="page">
+            <div class="coming-soon-container">
+                <h2 class="coming-soon-title">Coming Soon</h2>
+                <p class="coming-soon-message">We are working hard to bring this feature to you. Stay tuned!</p>
+                
+                <div class="countdown-timer">
+                    <div class="timer-box">
+                        <span class="timer" id="days">20</span>
+                        <p>Days</p>
+                    </div>
+                    <div class="timer-box">
+                        <span class="timer" id="hours">59</span>
+                        <p>Hours</p>
+                    </div>
+                    <div class="timer-box">
+                        <span class="timer" id="minutes">59</span>
+                        <p>Minutes</p>
+                    </div>
+                    <div class="timer-box">
+                        <span class="timer" id="seconds">59</span>
+                        <p>Seconds</p>
+                    </div>
+                </div>
+                
+                <div class="subscribe-container">
+                    <input type="email" class="email-input" placeholder="Enter your email to get notified">
+                    <button class="notify-btn">Notify Me</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="shop" class="page">
+            <!-- Level Selection -->
+            <div class="level-selection">
+                <label for="level-select">Choose Level:</label>
+                <select id="level-select">
+                    <option value="rare">Rare NFTs</option>
+                    <option value="legendary">Legendary NFTs</option>
+                </select>
+            </div>
+            <!-- Shop Container -->
+            <div id="shop-container" class="shop-container"></div>
+            <!-- Message Box -->
+            <div id="message-box" class="message-box"></div>
+        </section>
+        
+        <section id="collection" class="page">
+            <h2>Your Collection</h2>
+            <div id="collection-container" class="collection-container"></div>
+        </section>
+    </main>
+    
+    <!-- Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-item" data-target="tasks"><i class="fa fa-tasks"></i><span>Tasks</span></button>
+        <button class="nav-item" data-target="games"><i class="fa fa-gamepad"></i><span>Games</span></button>
+        <button class="nav-item" data-target="shop"><i class="fa fa-store"></i><span>Shop</span></button>
+        <button class="nav-item" data-target="collection"><i class="fa fa-box"></i><span>Collection</span></button>
+    </nav>
+  </div>
+</body>
+</html>
