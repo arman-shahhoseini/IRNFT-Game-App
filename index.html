@@ -110,9 +110,20 @@
             <div id="message-box" class="message-box"></div>
         </section>
         <section id="collection" class="page">
-            <h2>Your Collection</h2>
-            <div id="collection-container" class="collection-container"></div>
+           <h2>Your Collection</h2>
+          <div id="collection-container" class="collection-container"></div>
         </section>
+
+<!-- Transfer Modal -->
+        <div id="transfer-modal" class="modal-overlay" style="display: none;">
+           <div class="modal">
+               <h3>Transfer NFT</h3>
+               <p id="transfer-nft-info"></p>
+               <input type="text" id="recipient-username" class="login-input" placeholder="Recipient Username" required />
+               <button id="confirm-transfer-btn" class="login-btn">Confirm Transfer</button>
+               <button id="cancel-transfer-btn" class="login-btn" style="background: #333;">Cancel</button>
+           </div>
+        </div>
 
     </main>
     
