@@ -482,6 +482,23 @@ body {
       transform: translateY(0);
     }
   }
+
+.transfer-btn {
+    background-color: #ff007a;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.transfer-btn:hover {
+    background-color: #ff4081;
+}
+
   
   /* General Game Section Styling */
 /* بخش Coming Soon */
