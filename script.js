@@ -325,6 +325,25 @@ function initializeTasks() {
         }
     });    
 
+    function handleCheckbox(button, url) {
+    // انتقال به لینک تلگرام
+    window.open(url, '_blank');
+
+    // افزودن کوین‌ها پس از انجام
+    setTimeout(() => {
+        const user = userData[currentUser];
+        const coins = parseInt(button.closest('.task-item').dataset.coins);
+        user.coins += coins;
+        localStorage.setItem("users", JSON.stringify(userData));
+        updateUI();
+        showMessage("Task Completed!", `You earned ${coins} coins for joining our Telegram channel.`, "success");
+
+        // غیرفعال کردن دکمه
+        button.disabled = true;
+        button.textContent = "Completed";
+    }, 5000); // تأخیر ۵ ثانیه‌ای برای اطمینان از انجام تسک
+}
+
     // Initialize UI
     generateNFTs("rare");
     initializeTasks();
