@@ -348,3 +348,83 @@ function initializeTasks() {
     generateNFTs("rare");
     initializeTasks();
 });
+
+
+function updateCollection() {
+    const user = userData[currentUser];
+    collectionContainer.innerHTML = user.collection
+        .map((nft, index) => `
+            <div class="collection-item">
+                <img src="${nft.image}" alt="${nft.name} #${nft.number}">
+                <h4>${nft.name} #${nft.number}</h4>
+                <button class="transfer-btn" data-index="${index}">Transfer</button>
+            </div>`)
+        .join("");
+
+    // Add event listeners to transfer buttons
+    const transferButtons = collectionContainer.querySelectorAll(".transfer-btn");
+    transferButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            const nftIndex = button.getAttribute("data-index");
+            showTransferModal(nftIndex);
+        });
+    });
+}
+
+// Show transfer modal
+function showTransferModal(nftIndex) {
+    const nft = userData[currentUser].collection[nftIndex];
+    Swal.fire({
+        title: `Transfer ${nft.name} #${nft.number}`,
+        input: "text",
+        inputLabel: "Enter the username of the recipient:",
+        inputPlaceholder: "Recipient's username",
+        showCancelButton: true,
+        confirmButtonText: "Transfer",
+        cancelButtonText: "Cancel",
+        background: "#121212",
+        color: "#eaeaea",
+        confirmButtonColor: "#00ffd1",
+        cancelButtonColor: "#ff007a",
+        preConfirm: (recipient) => {
+            if (!recipient) {
+                Swal.showValidationMessage("Recipient username cannot be empty.");
+                return false;
+            }
+            if (!userData[recipient]) {
+                Swal.showValidationMessage("Recipient username does not exist.");
+                return false;
+            }
+            const recipientUser = userData[recipient];
+            if (recipientUser.collection.some(item => item.name === nft.name && item.number === nft.number)) {
+                Swal.showValidationMessage("Recipient already owns this NFT.");
+                return false;
+            }
+            return recipient;
+        }
+    }).then(result => {
+        if (result.isConfirmed) {
+            const recipient = result.value;
+            transferNFT(nftIndex, recipient);
+        }
+    });
+}
+
+// Transfer NFT function
+function transferNFT(nftIndex, recipient) {
+    const user = userData[currentUser];
+    const recipientUser = userData[recipient];
+
+    // Remove NFT from current user's collection
+    const nft = user.collection.splice(nftIndex, 1)[0];
+
+    // Add NFT to recipient's collection
+    recipientUser.collection.push(nft);
+
+    // Save changes to localStorage
+    localStorage.setItem("users", JSON.stringify(userData));
+
+    // Update the UI
+    updateUI();
+    showMessage("Transfer Successful!", `You have transferred ${nft.name} #${nft.number} to ${recipient}.`, "success");
+}
