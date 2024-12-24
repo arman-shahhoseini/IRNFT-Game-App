@@ -248,42 +248,54 @@ function initializeTasks() {
 }
 
 
-    // Timer setup
-    let days = 20, hours = 23, minutes = 59, seconds = 59;
+// Timer setup
+const targetDate = new Date();
+targetDate.setDate(targetDate.getDate() + 20);
+targetDate.setHours(targetDate.getHours() + 23);
+targetDate.setMinutes(targetDate.getMinutes() + 59);
+targetDate.setSeconds(targetDate.getSeconds() + 59);
 
-    // Timer update function
-    const updateTimer = () => {
-        if (seconds > 0) {
-            seconds--;
-        } else if (minutes > 0) {
-            minutes--;
-            seconds = 59;
-        } else if (hours > 0) {
-            hours--;
-            minutes = 59;
-            seconds = 59;
-        } else if (days > 0) {
-            days--;
-            hours = 23;
-            minutes = 59;
-            seconds = 59;
-        } else {
-            clearInterval(timerInterval);
-            alert("Time's up!");
-        }
+// Cache DOM elements for performance
+const timerElements = {
+    days: document.querySelector("#days"),
+    hours: document.querySelector("#hours"),
+    minutes: document.querySelector("#minutes"),
+    seconds: document.querySelector("#seconds"),
+};
 
-        // Update values in DOM
-        timerElements.days.textContent = days;
-        timerElements.hours.textContent = String(hours).padStart(2, '0');
-        timerElements.minutes.textContent = String(minutes).padStart(2, '0');
-        timerElements.seconds.textContent = String(seconds).padStart(2, '0');
-    };
+// Timer update function
+const updateTimer = () => {
+    const now = new Date();
+    const timeDifference = targetDate - now;
 
-    // Call updateTimer every second
-    const timerInterval = setInterval(updateTimer, 1000);
+    if (timeDifference <= 0) {
+        clearInterval(timerInterval);
+        alert("Time's up!");
+        timerElements.days.textContent = 0;
+        timerElements.hours.textContent = "00";
+        timerElements.minutes.textContent = "00";
+        timerElements.seconds.textContent = "00";
+        return;
+    }
 
-    // Call once initially
-    updateTimer();
+    const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+    // Update values in DOM
+    timerElements.days.textContent = days;
+    timerElements.hours.textContent = String(hours).padStart(2, '0');
+    timerElements.minutes.textContent = String(minutes).padStart(2, '0');
+    timerElements.seconds.textContent = String(seconds).padStart(2, '0');
+};
+
+// Call updateTimer every second
+const timerInterval = setInterval(updateTimer, 1000);
+
+// Call once initially to render initial values
+updateTimer();
+
 
     // Login form handling
     loginForm.addEventListener("submit", (e) => {
