@@ -621,3 +621,66 @@ body {
     transform: scale(1.05);
   }
   
+
+/* Game Container */
+.game-container {
+  text-align: center;
+  padding: 20px;
+  background: #1e1e1e;
+  border-radius: 10px;
+  margin: 20px auto;
+  max-width: 600px;
+  color: #eaeaea;
+}
+
+.game-info {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+  font-size: 1.2rem;
+}
+
+#game-area {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  background: #121212;
+  border: 2px solid #00ffd1;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+#start-game-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: #00ffd1;
+  color: #121212;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+#start-game-btn:hover {
+  background: #ff007a;
+  color: #fff;
+}
+
+#start-game-btn:disabled {
+  background: #333;
+  color: #777;
+  cursor: not-allowed;
+}
+
+/* Falling Coin */
+.falling-coin {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background-color: gold;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+}
