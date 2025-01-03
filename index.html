@@ -13,7 +13,6 @@
   <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider/dist/umd/index.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-
 </head>
 <body>
     <div id="login-box" class="login-overlay">
@@ -62,35 +61,16 @@
             </ul>
         </section>
 
-        <!-- Games Section with Coming Soon Timer -->
+        <!-- Games Section -->
         <section id="games" class="page">
-            <div class="coming-soon-container">
-                <h2 class="coming-soon-title">Coming Soon</h2>
-                <p class="coming-soon-message">We are working hard to bring this feature to you. Stay tuned!</p>
-                
-                <div class="countdown-timer">
-                    <div class="timer-box">
-                        <span class="timer" id="days">20</span>
-                        <p>Days</p>
-                    </div>
-                    <div class="timer-box">
-                        <span class="timer" id="hours">59</span>
-                        <p>Hours</p>
-                    </div>
-                    <div class="timer-box">
-                        <span class="timer" id="minutes">59</span>
-                        <p>Minutes</p>
-                    </div>
-                    <div class="timer-box">
-                        <span class="timer" id="seconds">59</span>
-                        <p>Seconds</p>
-                    </div>
+            <div class="game-container">
+                <h2>Crypto Miner 3D</h2>
+                <div class="game-info">
+                    <p>Time Left: <span id="time-left">30</span>s</p>
+                    <p>Coins Collected: <span id="score">0</span></p>
                 </div>
-                
-                <div class="subscribe-container">
-                    <input type="email" class="email-input" placeholder="Enter your email to get notified">
-                    <button class="notify-btn">Notify Me</button>
-                </div>
+                <div id="game-area"></div>
+                <button id="start-game-btn" class="login-btn">Start Game</button>
             </div>
         </section>
 
@@ -113,7 +93,7 @@
           <div id="collection-container" class="collection-container"></div>
         </section>
 
-<!-- Transfer Modal -->
+        <!-- Transfer Modal -->
         <div id="transfer-modal" class="modal-overlay" style="display: none;">
            <div class="modal">
                <h3>Transfer NFT</h3>
@@ -123,7 +103,6 @@
                <button id="cancel-transfer-btn" class="login-btn" style="background: #333;">Cancel</button>
            </div>
         </div>
-
     </main>
     
     <!-- Navigation -->
