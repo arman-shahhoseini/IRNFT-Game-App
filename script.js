@@ -46,12 +46,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const shopContainer = document.getElementById("shop-container");
     const levelSelect = document.getElementById("level-select");
     const taskContainer = document.getElementById("task-container");
-    const timerElements = {
-        days: document.getElementById('days'),
-        hours: document.getElementById('hours'),
-        minutes: document.getElementById('minutes'),
-        seconds: document.getElementById('seconds')
-    };
 
     // UI Update functions
     function updateUI() {
@@ -65,11 +59,19 @@ document.addEventListener("DOMContentLoaded", () => {
     function updateCollection() {
         const user = userData[currentUser];
         collectionContainer.innerHTML = user.collection
-            .map(nft => `<div class="collection-item">
-                            <img src="${nft.image}" alt="${nft.name} #${nft.number}">
-                            <h4>${nft.name} #${nft.number}</h4>
-                        </div>`)
+            .map((nft, index) => `
+                <div class="collection-item">
+                    <img src="${nft.image}" alt="${nft.name} #${nft.number}">
+                    <h4>${nft.name} #${nft.number}</h4>
+                    <button class="transfer-btn" data-index="${index}" data-name="${nft.name}" data-number="${nft.number}">Transfer</button>
+                </div>
+            `)
             .join("");
+
+        // Add event listeners to transfer buttons
+        document.querySelectorAll(".transfer-btn").forEach(button => {
+            button.addEventListener("click", () => openTransferModal(button));
+        });
     }
 
     // Message display function
@@ -85,56 +87,42 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Wallet connection function
-    document.addEventListener("DOMContentLoaded", () => {
-        const connectWalletButton = document.getElementById("connect-wallet-btn");
-    
-        async function connectVoltWallet() {
-            try {
-                // Check if Volt wallet is available
-                if (window.volt) {
-                    console.log("Volt wallet detected");
-    
-                    // Connect to Volt
-                    const provider = new ethers.providers.Web3Provider(window.volt);
-                    await provider.send("eth_requestAccounts", []); // Request account access
-                    const signer = provider.getSigner();
-                    const walletAddress = await signer.getAddress();
-    
-                    // Display success message
-                    showMessage("Wallet Connected!", `Connected to Volt wallet at address: ${walletAddress}`, "success");
-                    console.log("Connected Wallet Address:", walletAddress);
-                } else {
-                    // Volt wallet not found
-                    showMessage("Wallet Not Found", "Volt wallet is not detected. Please install Volt wallet.", "error");
-                }
-            } catch (error) {
-                console.error("Error connecting to Volt wallet:", error);
-                showMessage("Connection Error", "An error occurred while connecting to the wallet. Try again.", "error");
+    const connectWalletButton = document.getElementById("connect-wallet-btn");
+
+    async function connectVoltWallet() {
+        try {
+            // Check if Volt wallet is available
+            if (window.volt) {
+                console.log("Volt wallet detected");
+
+                // Connect to Volt
+                const provider = new ethers.providers.Web3Provider(window.volt);
+                await provider.send("eth_requestAccounts", []); // Request account access
+                const signer = provider.getSigner();
+                const walletAddress = await signer.getAddress();
+
+                // Display success message
+                showMessage("Wallet Connected!", `Connected to Volt wallet at address: ${walletAddress}`, "success");
+                console.log("Connected Wallet Address:", walletAddress);
+            } else {
+                // Volt wallet not found
+                showMessage("Wallet Not Found", "Volt wallet is not detected. Please install Volt wallet.", "error");
             }
+        } catch (error) {
+            console.error("Error connecting to Volt wallet:", error);
+            showMessage("Connection Error", "An error occurred while connecting to the wallet. Try again.", "error");
         }
-    
-        // Event listener for the connect button
+    }
+
+    if (connectWalletButton) {
         connectWalletButton.addEventListener("click", connectVoltWallet);
-    
-        // Reusable function to show messages
-        function showMessage(title, text, type) {
-            Swal.fire({
-                title,
-                text,
-                icon: type,
-                background: "#121212",
-                color: "#eaeaea",
-                confirmButtonColor: type === "success" ? "#00ffd1" : "#ff007a",
-            });
-        }
-    });
-    
+    }
 
     // NFT generation function
     function generateNFTs(level) {
         const levels = {
-            rare: { name: "Rare NFTs", priceMultiplier: 50, start: 1, end: 10 },
-            legendary: { name: "Legendary NFTs", priceMultiplier: 100, start: 11, end: 20 },
+            rare: { name: "Rare NFTs", priceMultiplier: 500, start: 1, end: 10 }, // قیمت از 500 شروع می‌شود
+            legendary: { name: "Legendary NFTs", priceMultiplier: 5000, start: 11, end: 20 }, // قیمت از 10000 شروع می‌شود
         };
 
         const { name, priceMultiplier, start, end } = levels[level];
@@ -181,115 +169,78 @@ document.addEventListener("DOMContentLoaded", () => {
         generateNFTs(e.target.value);
     });
 
-// Task initialization
-function initializeTasks() {
-    if (!currentUser) return; // Ensure a user is logged in
-    const user = userData[currentUser];
+    // Task initialization
+    function initializeTasks() {
+        if (!currentUser) return; // Ensure a user is logged in
+        const user = userData[currentUser];
 
-    // Default structure for new users
-    if (!user.completedTasks) user.completedTasks = [];
-    if (!user.lastCompletionDate) user.lastCompletionDate = null;
+        // Default structure for new users
+        if (!user.completedTasks) user.completedTasks = [];
+        if (!user.lastCompletionDate) user.lastCompletionDate = null;
 
-    const tasks = taskContainer.querySelectorAll(".task-item");
+        const tasks = taskContainer.querySelectorAll(".task-item");
 
-    const currentTime = new Date();
-    const resetTime = new Date();
-    resetTime.setHours(4, 0, 0, 0); // Reset at 4:00 a.m.
+        const currentTime = new Date();
+        const resetTime = new Date();
+        resetTime.setHours(4, 0, 0, 0); // Reset at 4:00 a.m.
 
-    // Check if tasks need to be reset
-    const lastCompletionDate = user.lastCompletionDate ? new Date(user.lastCompletionDate) : null;
+        // Check if tasks need to be reset
+        const lastCompletionDate = user.lastCompletionDate ? new Date(user.lastCompletionDate) : null;
 
-    if (!lastCompletionDate || (currentTime > resetTime && lastCompletionDate.toDateString() !== currentTime.toDateString())) {
-        user.completedTasks = []; // Reset completed tasks
-        user.lastCompletionDate = currentTime.toISOString(); // Update last completion date
-        localStorage.setItem("users", JSON.stringify(userData));
-    }
-
-    // Set up task buttons
-    tasks.forEach((task, index) => {
-        const coins = parseInt(task.getAttribute("data-coins"));
-        const button = task.querySelector(".complete-task-btn");
-
-        // Disable button if the task is already completed
-        if (user.completedTasks.includes(index)) {
-            button.disabled = true;
-            button.textContent = "Completed";
-            button.style.background = "#333";
-            button.style.color = "#777";
-        } else {
-            button.disabled = false;
-            button.textContent = "Complete Task";
-            button.style.background = "";
-            button.style.color = "";
+        if (!lastCompletionDate || (currentTime > resetTime && lastCompletionDate.toDateString() !== currentTime.toDateString())) {
+            user.completedTasks = []; // Reset completed tasks
+            user.lastCompletionDate = currentTime.toISOString(); // Update last completion date
+            localStorage.setItem("users", JSON.stringify(userData));
         }
 
-        // Button click event
-        button.addEventListener("click", () => {
-            if (!user.completedTasks.includes(index)) {
-                user.coins += coins;
-                user.completedTasks.push(index);
+        // Set up task buttons
+        tasks.forEach((task, index) => {
+            const coins = parseInt(task.getAttribute("data-coins"));
+            const button = task.querySelector(".complete-task-btn");
 
-                // Save data to localStorage
-                localStorage.setItem("users", JSON.stringify(userData));
-
-                updateUI();
-                showMessage("Task Completed!", `You earned ${coins} coins!`, "success");
-
-                // Update button UI
+            // Disable button if the task is already completed
+            if (user.completedTasks.includes(index)) {
                 button.disabled = true;
                 button.textContent = "Completed";
                 button.style.background = "#333";
                 button.style.color = "#777";
             } else {
-                showMessage("Task Already Completed", "Wait until 4:00 a.m. to complete tasks again.", "warning");
+                button.disabled = false;
+                button.textContent = "Complete Task";
+                button.style.background = "";
+                button.style.color = "";
             }
+
+            // Button click event
+            button.addEventListener("click", () => {
+                if (!user.completedTasks.includes(index)) {
+                    user.coins += coins;
+                    user.completedTasks.push(index);
+
+                    // Save data to localStorage
+                    localStorage.setItem("users", JSON.stringify(userData));
+
+                    updateUI();
+                    showMessage("Task Completed!", `You earned ${coins} coins!`, "success");
+
+                    // Update button UI
+                    button.disabled = true;
+                    button.textContent = "Completed";
+                    button.style.background = "#333";
+                    button.style.color = "#777";
+                } else {
+                    showMessage("Task Already Completed", "Wait until 4:00 a.m. to complete tasks again.", "warning");
+                }
+            });
         });
-    });
-}
-
-
-    // Timer setup
-    let days = 20, hours = 23, minutes = 59, seconds = 59;
-    // Timer update function
-    const updateTimer = () => {
-        if (seconds > 0) {
-            seconds--;
-        } else if (minutes > 0) {
-            minutes--;
-            seconds = 59;
-        } else if (hours > 0) {
-            hours--;
-            minutes = 59;
-            seconds = 59;
-        } else if (days > 0) {
-            days--;
-            hours = 23;
-            minutes = 59;
-            seconds = 59;
-        } else {
-            clearInterval(timerInterval);
-            alert("Time's up!");
-        }
-
-        // Update values in DOM
-        timerElements.days.textContent = days;
-        timerElements.hours.textContent = String(hours).padStart(2, '0');
-        timerElements.minutes.textContent = String(minutes).padStart(2, '0');
-        timerElements.seconds.textContent = String(seconds).padStart(2, '0');
-    };
-
-        // Call updateTimer every second
-    const timerInterval = setInterval(updateTimer, 1000);
-
-updateTimer();
-
+    }
 
     // Login form handling
     loginForm.addEventListener("submit", (e) => {
         e.preventDefault();
         const username = document.getElementById("username").value.trim();
         const password = document.getElementById("password").value.trim();
-    
+
         if (userData[username]) {
             if (userData[username].password === password) {
                 currentUser = username;
@@ -311,6 +262,7 @@ updateTimer();
                 collection: [],
                 completedTasks: [],
                 lastCompletionDate: null,
+                lastGameDate: null, // Add last game date for the new user
             };
             currentUser = username;
             localStorage.setItem("users", JSON.stringify(userData));
@@ -322,91 +274,170 @@ updateTimer();
                 initializeTasks(); // Initialize tasks for the new user
             }, 1000);
         }
-    });    
+    });
 
-    function handleCheckbox(button, url) {
-    // انتقال به لینک تلگرام
-    window.open(url, '_blank');
+    // Transfer NFT functionality
+    function openTransferModal(button) {
+        const nftName = button.getAttribute("data-name");
+        const nftNumber = button.getAttribute("data-number");
+        const nftIndex = button.getAttribute("data-index");
 
-    // افزودن کوین‌ها پس از انجام
-    setTimeout(() => {
+        document.getElementById("transfer-nft-info").textContent = `Transferring ${nftName} #${nftNumber}`;
+        document.getElementById("transfer-modal").style.display = "flex";
+
+        document.getElementById("confirm-transfer-btn").onclick = () => {
+            const recipientUsername = document.getElementById("recipient-username").value.trim();
+            handleNFTTransfer(nftIndex, recipientUsername);
+        };
+
+        document.getElementById("cancel-transfer-btn").onclick = () => {
+            document.getElementById("transfer-modal").style.display = "none";
+        };
+    }
+
+    function handleNFTTransfer(nftIndex, recipientUsername) {
         const user = userData[currentUser];
-        const coins = parseInt(button.closest('.task-item').dataset.coins);
-        user.coins += coins;
-        localStorage.setItem("users", JSON.stringify(userData));
-        updateUI();
-        showMessage("Task Completed!", `You earned ${coins} coins for joining our Telegram channel.`, "success");
+        const recipient = userData[recipientUsername];
 
-        // غیرفعال کردن دکمه
-        button.disabled = true;
-        button.textContent = "Completed";
-    }, 5000); // تأخیر ۵ ثانیه‌ای برای اطمینان از انجام تسک
-}
+        if (!recipient) {
+            showMessage("User Not Found", "The recipient username does not exist.", "error");
+            return;
+        }
+
+        const nftToTransfer = user.collection[nftIndex];
+        if (recipient.collection.some(nft => nft.name === nftToTransfer.name && nft.number === nftToTransfer.number)) {
+            showMessage("Duplicate NFT", "The recipient already owns this NFT.", "error");
+            return;
+        }
+
+        // Transfer NFT
+        recipient.collection.push(nftToTransfer);
+        user.collection.splice(nftIndex, 1);
+        localStorage.setItem("users", JSON.stringify(userData));
+
+        // Update UI and close modal
+        updateUI();
+        document.getElementById("transfer-modal").style.display = "none";
+        showMessage("Transfer Successful", `You have transferred ${nftToTransfer.name} #${nftToTransfer.number} to ${recipientUsername}.`, "success");
+    }
+
+    // Game Logic (Coin Miner)
+    const gameArea = document.getElementById("game-area");
+    const timeLeftDisplay = document.getElementById("time-left");
+    const scoreDisplay = document.getElementById("score");
+    const startGameBtn = document.getElementById("start-game-btn");
+
+    let timeLeft = 30;
+    let score = 0;
+    let gameInterval;
+    let coinInterval;
+    let isGameActive = false;
+
+    // Function to create a falling coin
+    function createCoin() {
+        const coin = document.createElement("div");
+        coin.className = "falling-coin";
+        coin.style.left = `${Math.random() * (gameArea.offsetWidth - 40)}px`;
+        coin.style.top = "0";
+        gameArea.appendChild(coin);
+
+        // Move the coin down
+        const fallInterval = setInterval(() => {
+            const currentTop = parseFloat(coin.style.top);
+            if (currentTop >= gameArea.offsetHeight - 40) {
+                clearInterval(fallInterval);
+                coin.remove();
+            } else {
+                coin.style.top = `${currentTop + 5}px`;
+            }
+        }, 50);
+
+        // Collect coin on click
+        coin.addEventListener("click", () => {
+            score++;
+            scoreDisplay.textContent = score;
+            coin.remove();
+        });
+    }
+
+    // Function to start the game
+    function startGame() {
+        if (isGameActive) return; // Prevent multiple starts
+        isGameActive = true;
+
+        timeLeft = 30;
+        score = 0;
+        timeLeftDisplay.textContent = timeLeft;
+        scoreDisplay.textContent = score;
+        startGameBtn.disabled = true;
+
+        // Clear existing coins
+        gameArea.innerHTML = '';
+
+        // Timer
+        gameInterval = setInterval(() => {
+            timeLeft--;
+            timeLeftDisplay.textContent = timeLeft;
+
+            if (timeLeft <= 0) {
+                clearInterval(gameInterval);
+                clearInterval(coinInterval);
+                isGameActive = false;
+                endGame();
+            }
+        }, 1000);
+
+        // Create coins every 0.5 seconds
+        coinInterval = setInterval(createCoin, 500);
+    }
+
+    // Function to end the game
+    function endGame() {
+        if (currentUser) {
+            const user = userData[currentUser];
+            user.coins += score; // Add score to user's coins
+            user.lastGameDate = new Date().toISOString(); // Save last game date
+            localStorage.setItem("users", JSON.stringify(userData));
+            updateUI();
+            showMessage("Game Over!", `You collected ${score} coins!`, "info");
+        }
+        startGameBtn.disabled = false;
+    }
+    
+    // Check if the game can be played today
+    function checkGameAvailability() {
+        if (currentUser) {
+            const user = userData[currentUser];
+            const currentTime = new Date();
+            const resetTime = new Date();
+            resetTime.setHours(4, 0, 0, 0); // Reset at 4:00 a.m.
+
+            if (user.lastGameDate) {
+                const lastGameDate = new Date(user.lastGameDate);
+                if (currentTime > resetTime && lastGameDate.toDateString() !== currentTime.toDateString()) {
+                    user.lastGameDate = null; // Reset if it's a new day
+                    localStorage.setItem("users", JSON.stringify(userData)); // Save reset
+                }
+            }
+
+            if (user.lastGameDate) {
+                startGameBtn.disabled = true;
+                startGameBtn.textContent = "Come Back Tomorrow!";
+            } else {
+                startGameBtn.disabled = false;
+                startGameBtn.textContent = "Start Game";
+            }
+        }
+    }
+
+
+    // Update game availability on page load
+    checkGameAvailability();
+
+    // Event listener for the start game button
+    startGameBtn.addEventListener("click", startGame);
 
     // Initialize UI
     generateNFTs("rare");
     initializeTasks();
 });
-
-function updateCollection() {
-    const user = userData[currentUser];
-    collectionContainer.innerHTML = user.collection
-        .map((nft, index) => `
-            <div class="collection-item">
-                <img src="${nft.image}" alt="${nft.name} #${nft.number}">
-                <h4>${nft.name} #${nft.number}</h4>
-                <button class="transfer-btn" data-index="${index}" data-name="${nft.name}" data-number="${nft.number}">Transfer</button>
-            </div>
-        `)
-        .join("");
-
-    // Add event listeners to transfer buttons
-    document.querySelectorAll(".transfer-btn").forEach(button => {
-        button.addEventListener("click", () => openTransferModal(button));
-    });
-}
-
-function openTransferModal(button) {
-    const nftName = button.getAttribute("data-name");
-    const nftNumber = button.getAttribute("data-number");
-    const nftIndex = button.getAttribute("data-index");
-
-    document.getElementById("transfer-nft-info").textContent = `Transferring ${nftName} #${nftNumber}`;
-    document.getElementById("transfer-modal").style.display = "flex";
-
-    document.getElementById("confirm-transfer-btn").onclick = () => {
-        const recipientUsername = document.getElementById("recipient-username").value.trim();
-        handleNFTTransfer(nftIndex, recipientUsername);
-    };
-
-    document.getElementById("cancel-transfer-btn").onclick = () => {
-        document.getElementById("transfer-modal").style.display = "none";
-    };
-}
-
-function handleNFTTransfer(nftIndex, recipientUsername) {
-    const user = userData[currentUser];
-    const recipient = userData[recipientUsername];
-
-    if (!recipient) {
-        showMessage("User Not Found", "The recipient username does not exist.", "error");
-        return;
-    }
-
-    const nftToTransfer = user.collection[nftIndex];
-    if (recipient.collection.some(nft => nft.name === nftToTransfer.name && nft.number === nftToTransfer.number)) {
-        showMessage("Duplicate NFT", "The recipient already owns this NFT.", "error");
-        return;
-    }
-
-    // Transfer NFT
-    recipient.collection.push(nftToTransfer);
-    user.collection.splice(nftIndex, 1);
-    localStorage.setItem("users", JSON.stringify(userData));
-
-    // Update UI and close modal
-    updateUI();
-    document.getElementById("transfer-modal").style.display = "none";
-    showMessage("Transfer Successful", `You have transferred ${nftToTransfer.name} #${nftToTransfer.number} to ${recipientUsername}.`, "success");
-}
-
