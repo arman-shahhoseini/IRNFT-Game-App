@@ -64,6 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.getElementById("coin-transfer-btn").style.display = "inline-block";
                 document.getElementById("add-category-btn").style.display = "inline-block";
                 document.getElementById("add-nft-btn").style.display = "inline-block";
+                document.getElementById("delete-collection-btn").style.display = "inline-block";
             } else {
                 coinCount.textContent = user.coins;
 
@@ -71,6 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.getElementById("coin-transfer-btn").style.display = "none";
                 document.getElementById("add-category-btn").style.display = "none";
                 document.getElementById("add-nft-btn").style.display = "none";
+                document.getElementById("delete-collection-btn").style.display = "none";
             }
             updateCollection();
         }
@@ -556,6 +558,12 @@ document.addEventListener("DOMContentLoaded", () => {
             nfts: [],
         });
 
+        // Add the new category to the level select dropdown
+        const option = document.createElement("option");
+        option.value = categoryName.toLowerCase().replace(/\s+/g, "-");
+        option.textContent = categoryName;
+        levelSelect.appendChild(option);
+
         localStorage.setItem("users", JSON.stringify(userData));
         document.getElementById("add-category-modal").style.display = "none";
         showMessage("Category Added!", `New category "${categoryName}" created successfully.`, "success");
@@ -623,5 +631,59 @@ document.addEventListener("DOMContentLoaded", () => {
     const addNFTButton = document.getElementById("add-nft-btn");
     if (addNFTButton) {
         addNFTButton.addEventListener("click", openAddNFTModal);
+    }
+
+    // ================================================
+    // اضافه کردن قابلیت حذف کالکشن برای ادمین
+    // ================================================
+
+    // Function to open the "Delete Collection" modal
+    function openDeleteCollectionModal() {
+        if (currentUser === "admin") {
+            document.getElementById("delete-collection-modal").style.display = "flex";
+
+            // Populate the collection dropdown
+            const deleteCollectionSelect = document.getElementById("delete-collection-select");
+            deleteCollectionSelect.innerHTML = userData.admin.nftCategories
+                .map((category, index) => `<option value="${index}">${category.name}</option>`)
+                .join("");
+
+            document.getElementById("confirm-delete-collection-btn").onclick = () => {
+                const categoryIndex = parseInt(document.getElementById("delete-collection-select").value);
+                handleDeleteCollection(categoryIndex);
+            };
+
+            document.getElementById("cancel-delete-collection-btn").onclick = () => {
+                document.getElementById("delete-collection-modal").style.display = "none";
+            };
+        } else {
+            showMessage("Access Denied", "Only admin can delete collections.", "error");
+        }
+    }
+
+    // Function to handle deleting a collection
+    function handleDeleteCollection(categoryIndex) {
+        const category = userData.admin.nftCategories[categoryIndex];
+        const categoryName = category.name;
+
+        // Remove the category from the list
+        userData.admin.nftCategories.splice(categoryIndex, 1);
+
+        // Remove the category from the level select dropdown
+        const levelSelect = document.getElementById("level-select");
+        const optionToRemove = Array.from(levelSelect.options).find(option => option.textContent === categoryName);
+        if (optionToRemove) {
+            levelSelect.removeChild(optionToRemove);
+        }
+
+        localStorage.setItem("users", JSON.stringify(userData));
+        document.getElementById("delete-collection-modal").style.display = "none";
+        showMessage("Collection Deleted!", `The collection "${categoryName}" has been deleted.`, "success");
+    }
+
+    // Add event listener for the delete collection button
+    const deleteCollectionButton = document.getElementById("delete-collection-btn");
+    if (deleteCollectionButton) {
+        deleteCollectionButton.addEventListener("click", openDeleteCollectionModal);
     }
 });
