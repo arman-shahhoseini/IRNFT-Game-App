@@ -90,7 +90,10 @@
         </section>
         <section id="collection" class="page">
            <h2>Your Collection</h2>
-          <div id="collection-container" class="collection-container"></div>
+           <div class="collection-summary">
+               <p>Total Value: <span id="total-value">$0.00</span></p>
+           </div>
+           <div id="collection-container" class="collection-container"></div>
         </section>
 
         <!-- Transfer NFT Modal -->
@@ -124,7 +127,7 @@
         <button class="nav-item" data-target="shop"><i class="fa fa-store"></i><span>Shop</span></button>
         <button class="nav-item" data-target="collection"><i class="fa fa-box"></i><span>Collection</span></button>
         <!-- Add Transfer Coins Button for Admin -->
-        <button id="coin-transfer-btn" class="nav-item"><i class="fa fa-coins"></i><span>Transfer Coins</span></button>
+        <button id="coin-transfer-btn" class="nav-item" style="display: none;"><i class="fa fa-coins"></i><span>Transfer Coins</span></button>
     </nav>
   </div>
 </body>
