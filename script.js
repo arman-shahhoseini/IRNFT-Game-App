@@ -47,6 +47,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const levelSelect = document.getElementById("level-select");
     const taskContainer = document.getElementById("task-container");
 
+    // تابع محاسبه قیمت دلاری NFT
+    function calculateDollarPrice(coinPrice) {
+        const exchangeRate = 1000; // نرخ تبدیل: 1000 سکه = 1 دلار
+        return (coinPrice / exchangeRate).toFixed(2); // قیمت دلاری با دو رقم اعشار
+    }
+
     // UI Update functions
     function updateUI() {
         if (currentUser) {
@@ -134,13 +140,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         for (let i = start; i <= end; i++) {
             const price = i * priceMultiplier;
+            const dollarPrice = calculateDollarPrice(price); // محاسبه قیمت دلاری
 
             const nftCard = document.createElement("div");
             nftCard.className = "nft-card";
             nftCard.innerHTML = `
                 <img src="NFT-Collections/NFT${i}.png" alt="${name} #${i}">
                 <h3>${name} #${i}</h3>
-                <p>Price: <span class="price">${price}</span> Coins</p>
+                <p>Price: <span class="price">${price}</span> Coins ($${dollarPrice})</p>
                 <button class="buy-btn">Buy</button>
             `;
 
