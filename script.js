@@ -441,3 +441,73 @@ document.addEventListener("DOMContentLoaded", () => {
     generateNFTs("rare");
     initializeTasks();
 });
+
+    // Transfer Coins functionality for admin
+    function openCoinTransferModal() {
+        if (currentUser === "admin") {
+            document.getElementById("coin-transfer-modal").style.display = "flex";
+
+            document.getElementById("confirm-coin-transfer-btn").onclick = () => {
+                const recipientUsername = document.getElementById("coin-recipient-username").value.trim();
+                const amount = parseInt(document.getElementById("coin-amount").value.trim());
+
+                if (!recipientUsername || isNaN(amount) || amount <= 0) {
+                    showMessage("Invalid Input", "Please enter a valid username and amount.", "error");
+                    return;
+                }
+
+                handleCoinTransfer(recipientUsername, amount);
+            };
+
+            document.getElementById("cancel-coin-transfer-btn").onclick = () => {
+                document.getElementById("coin-transfer-modal").style.display = "none";
+            };
+        } else {
+            showMessage("Access Denied", "Only admin can transfer coins.", "error");
+        }
+    }
+
+    function handleCoinTransfer(recipientUsername, amount) {
+        const recipient = userData[recipientUsername];
+
+        if (!recipient) {
+            showMessage("User Not Found", "The recipient username does not exist.", "error");
+            return;
+        }
+
+        // Admin has unlimited coins, so no need to check balance
+        recipient.coins += amount;
+        localStorage.setItem("users", JSON.stringify(userData));
+
+        // Update UI and close modal
+        document.getElementById("coin-transfer-modal").style.display = "none";
+        showMessage("Transfer Successful", `You have transferred ${amount} coins to ${recipientUsername}.`, "success");
+    }
+
+    // Add a button for admin to open the coin transfer modal
+    const coinTransferButton = document.createElement("button");
+    coinTransferButton.textContent = "Transfer Coins";
+    coinTransferButton.id = "coin-transfer-btn";
+    coinTransferButton.style.margin = "10px";
+    coinTransferButton.addEventListener("click", openCoinTransferModal);
+
+    // Add the button to the UI (e.g., in the navigation or a specific section)
+    document.querySelector(".nav").appendChild(coinTransferButton);
+
+    // Add the coin transfer modal HTML to the page (if not already present)
+    const coinTransferModalHTML = `
+        <div id="coin-transfer-modal" class="modal">
+            <div class="modal-content">
+                <h3>Transfer Coins</h3>
+                <p>You can transfer unlimited coins to any user.</p>
+                <input type="text" id="coin-recipient-username" placeholder="Recipient Username" required>
+                <input type="number" id="coin-amount" placeholder="Amount" required>
+                <button id="confirm-coin-transfer-btn">Confirm Transfer</button>
+                <button id="cancel-coin-transfer-btn">Cancel</button>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML("beforeend", coinTransferModalHTML);
+
+    // Ensure the modal is hidden by default
+    document.getElementById("coin-transfer-modal").style.display = "none";
