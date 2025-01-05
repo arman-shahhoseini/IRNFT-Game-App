@@ -51,7 +51,11 @@ document.addEventListener("DOMContentLoaded", () => {
     function updateUI() {
         if (currentUser) {
             const user = userData[currentUser];
-            coinCount.textContent = user.coins;
+            if (currentUser === "admin") {
+                coinCount.textContent = "∞"; // نمایش سکه‌های نامحدود برای ادمین
+            } else {
+                coinCount.textContent = user.coins;
+            }
             updateCollection();
         }
     }
@@ -143,8 +147,10 @@ document.addEventListener("DOMContentLoaded", () => {
             const buyBtn = nftCard.querySelector(".buy-btn");
             buyBtn.addEventListener("click", () => {
                 const user = userData[currentUser];
-                if (user.coins >= price) {
-                    user.coins -= price;
+                if (currentUser === "admin" || user.coins >= price) {
+                    if (currentUser !== "admin") {
+                        user.coins -= price;
+                    }
                     user.collection.push({
                         name,
                         number: i,
@@ -430,7 +436,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-
     // Update game availability on page load
     checkGameAvailability();
 
@@ -440,7 +445,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // Initialize UI
     generateNFTs("rare");
     initializeTasks();
-});
+
+    // ================================================
+    // اضافه کردن قابلیت انتقال سکه برای کاربر admin
+    // ================================================
 
     // Transfer Coins functionality for admin
     function openCoinTransferModal() {
@@ -511,3 +519,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Ensure the modal is hidden by default
     document.getElementById("coin-transfer-modal").style.display = "none";
+});
