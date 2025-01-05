@@ -746,18 +746,38 @@ body {
 
 /* استایل متن "Total Value" */
 .collection-summary p {
-    font-size: 18px;
-    font-weight: 600;
+    font-size: 24px; /* بزرگ‌تر کردن فونت */
+    font-weight: 700; /* ضخیم‌تر کردن فونت */
     color: #eaeaea;
     margin: 0;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 2px; /* افزایش فاصله بین حروف */
+    position: relative;
+    display: inline-block;
+}
+
+/* افکت نئونی برای متن "Total Value" */
+.collection-summary p::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(0, 255, 209, 0.3), transparent 70%);
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.collection-summary p:hover::before {
+    opacity: 1;
 }
 
 /* استایل مقدار دلاری */
 #total-value {
-    font-size: 28px;
-    font-weight: 700;
+    font-size: 36px; /* بزرگ‌تر کردن فونت */
+    font-weight: 800; /* ضخیم‌تر کردن فونت */
     color: #00ffd1; /* رنگ نئونی */
     background: linear-gradient(90deg, #00ffd1, #00b8a9);
     -webkit-background-clip: text;
