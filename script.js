@@ -216,59 +216,66 @@ loginForm.addEventListener("submit", (e) => {
   const username = document.getElementById("username").value.trim().toLowerCase();
   const password = document.getElementById("password").value.trim();
 
-  get(ref(database, "users/" + username)).then((snapshot) => {
-    const user = snapshot.val();
-    console.log("User data from Firebase:", user); // برای دیباگ
+  if (!username || !password) {
+    showMessage("Invalid Input", "Please enter a valid username and password.", "error");
+    return;
+  }
 
-    if (user) {
-      if (user.password === password) {
-        currentUser = username;
-        userData[currentUser] = user;
-        loginMessage.style.color = "#00ffd1";
-        loginMessage.textContent = "Login successful!";
-        setTimeout(() => {
-          loginBox.style.display = "none";
-          updateUI();
-          generateNFTs("rare");
-          initializeTasks(); // Initialize tasks after login
-        }, 1000);
-      } else {
-        loginMessage.style.color = "#ff007a";
-        loginMessage.textContent = "Incorrect password!";
-      }
-    } else {
-      const newUser = {
-        password,
-        coins: 50,
-        collection: [],
-        completedTasks: [],
-        lastCompletionDate: null,
-        lastGameDate: null,
-      };
-      set(ref(database, "users/" + username), newUser)
-        .then(() => {
+  get(ref(database, "users/" + username))
+    .then((snapshot) => {
+      const user = snapshot.val();
+      console.log("User data from Firebase:", user); // برای دیباگ
+
+      if (user) {
+        if (user.password === password) {
           currentUser = username;
-          userData[currentUser] = newUser;
+          userData[currentUser] = user;
           loginMessage.style.color = "#00ffd1";
-          loginMessage.textContent = "Account created successfully!";
+          loginMessage.textContent = "Login successful!";
           setTimeout(() => {
             loginBox.style.display = "none";
             updateUI();
             generateNFTs("rare");
-            initializeTasks(); // Initialize tasks after account creation
+            initializeTasks(); // Initialize tasks after login
           }, 1000);
-        })
-        .catch((error) => {
-          console.error("Error creating user:", error);
+        } else {
           loginMessage.style.color = "#ff007a";
-          loginMessage.textContent = "Error creating account!";
-        });
-    }
-  }).catch((error) => {
-    console.error("Error fetching user data:", error);
-    loginMessage.style.color = "#ff007a";
-    loginMessage.textContent = "Error logging in!";
-  });
+          loginMessage.textContent = "Incorrect password!";
+        }
+      } else {
+        const newUser = {
+          password,
+          coins: 50,
+          collection: [],
+          completedTasks: [],
+          lastCompletionDate: null,
+          lastGameDate: null,
+        };
+        set(ref(database, "users/" + username), newUser)
+          .then(() => {
+            currentUser = username;
+            userData[currentUser] = newUser;
+            loginMessage.style.color = "#00ffd1";
+            loginMessage.textContent = "Account created successfully!";
+            setTimeout(() => {
+              loginBox.style.display = "none";
+              updateUI();
+              generateNFTs("rare");
+              initializeTasks(); // Initialize tasks after account creation
+            }, 1000);
+          })
+          .catch((error) => {
+            console.error("Error creating user:", error);
+            loginMessage.style.color = "#ff007a";
+            loginMessage.textContent = "Error creating account!";
+          });
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching user data:", error);
+      loginMessage.style.color = "#ff007a";
+      loginMessage.textContent = "Error logging in!";
+    });
 });
 
 // Transfer Coins functionality for admin
