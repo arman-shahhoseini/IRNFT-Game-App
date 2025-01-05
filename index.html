@@ -141,6 +141,18 @@
                 <button id="cancel-add-nft-btn" class="login-btn" style="background: #333;">Cancel</button>
             </div>
         </div>
+
+        <!-- Delete Collection Modal -->
+        <div id="delete-collection-modal" class="modal-overlay" style="display: none;">
+            <div class="modal">
+                <h3>Delete Collection</h3>
+                <select id="delete-collection-select" class="login-input">
+                    <!-- Collections will be populated dynamically -->
+                </select>
+                <button id="confirm-delete-collection-btn" class="login-btn">Delete Collection</button>
+                <button id="cancel-delete-collection-btn" class="login-btn" style="background: #333;">Cancel</button>
+            </div>
+        </div>
     </main>
     
     <!-- Navigation -->
@@ -154,6 +166,8 @@
         <!-- Add Category and NFT Buttons for Admin -->
         <button id="add-category-btn" class="nav-item" style="display: none;"><i class="fa fa-plus"></i><span>Add Category</span></button>
         <button id="add-nft-btn" class="nav-item" style="display: none;"><i class="fa fa-plus"></i><span>Add NFT</span></button>
+        <!-- Add Delete Collection Button for Admin -->
+        <button id="delete-collection-btn" class="nav-item" style="display: none;"><i class="fa fa-trash"></i><span>Delete Collection</span></button>
     </nav>
   </div>
 </body>
