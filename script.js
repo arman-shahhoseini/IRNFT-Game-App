@@ -171,8 +171,8 @@ document.addEventListener("DOMContentLoaded", () => {
             const buyBtn = nftCard.querySelector(".buy-btn");
             const user = userData[currentUser];
 
-            // Check if the NFT is already in the user's collection
-            if (user && user.collection.some(nft => nft.name === name && nft.number === i)) {
+            // Check if the NFT is already in the user's collection (only for non-admin users)
+            if (user && currentUser !== "admin" && user.collection.some(nft => nft.name === name && nft.number === i)) {
                 buyBtn.disabled = true;
                 buyBtn.textContent = "Purchased";
             }
@@ -287,6 +287,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     loginBox.style.display = "none";
                     updateUI();
                     initializeTasks(); // Initialize tasks for the current user
+                    generateNFTs("rare"); // Regenerate NFTs to update buttons
                 }, 1000);
             } else {
                 loginMessage.style.color = "#ff007a";
@@ -309,6 +310,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 loginBox.style.display = "none";
                 updateUI();
                 initializeTasks(); // Initialize tasks for the new user
+                generateNFTs("rare"); // Regenerate NFTs to update buttons
             }, 1000);
         }
     });
