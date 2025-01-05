@@ -13,14 +13,20 @@
   <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider/dist/umd/index.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-  <!-- Telegram Login Widget -->
-  <script async src="https://telegram.org/js/telegram-widget.js?7" 
-          data-telegram-login="IRNFTMintBot" 
-          data-size="large" 
-          data-auth-url="https://irnft-game-app.vercel.app/auth" 
-          data-request-access="write"></script>
 </head>
 <body>
+  <div id="login-box" class="login-overlay">
+    <div class="login-container">
+      <h2>Login</h2>
+      <form id="login-form">
+        <input type="text" id="username" class="login-input" placeholder="Username" required />
+        <input type="password" id="password" class="login-input" placeholder="Password" required />
+        <button type="submit" class="login-btn">Login</button>
+        <p id="login-message" class="login-message"></p>
+      </form>
+    </div>
+  </div>
+
   <div id="app">
     <!-- Header -->
     <header class="app-header">
@@ -31,9 +37,6 @@
 
     <!-- Main Content -->
     <main>
-      <!-- Telegram Login Button -->
-      <div id="telegram-login"></div>
-
       <!-- Tasks Section -->
       <section id="tasks" class="page active">
         <div class="task-header">
@@ -127,54 +130,5 @@
       <button id="coin-transfer-btn" class="nav-item" style="display: none;"><i class="fa fa-coins"></i><span>Transfer Coins</span></button>
     </nav>
   </div>
-
-  <script>
-    // Telegram Login Widget Handler
-    function onTelegramAuth(user) {
-      const username = user.username;
-      const userId = user.id;
-      const hash = user.hash;
-
-      // Save user data to localStorage
-      localStorage.setItem("telegramUser", JSON.stringify(user));
-
-      // Hide Telegram Login Button
-      document.getElementById("telegram-login").style.display = "none";
-
-      // Initialize the game with the user's Telegram data
-      initializeGame(username, userId, hash);
-    }
-
-    // Initialize Game Function
-    function initializeGame(username, userId, hash) {
-      // Check if the user already exists in localStorage
-      let userData = JSON.parse(localStorage.getItem("users")) || {};
-      if (!userData[username]) {
-        // Create a new user if they don't exist
-        userData[username] = {
-          userId,
-          hash,
-          coins: 50,
-          collection: [],
-          completedTasks: [],
-          lastCompletionDate: null,
-          lastGameDate: null,
-        };
-        localStorage.setItem("users", JSON.stringify(userData));
-      }
-
-      // Set the current user
-      currentUser = username;
-      updateUI();
-      initializeTasks();
-      generateNFTs("rare");
-    }
-
-    // Check if the user is already logged in via Telegram
-    const telegramUser = JSON.parse(localStorage.getItem("telegramUser"));
-    if (telegramUser) {
-      initializeGame(telegramUser.username, telegramUser.id, telegramUser.hash);
-    }
-  </script>
 </body>
 </html>
