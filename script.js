@@ -46,11 +46,23 @@ document.addEventListener("DOMContentLoaded", () => {
     const shopContainer = document.getElementById("shop-container");
     const levelSelect = document.getElementById("level-select");
     const taskContainer = document.getElementById("task-container");
+    const totalValue = document.getElementById("total-value");
 
     // تابع محاسبه قیمت دلاری NFT
     function calculateDollarPrice(coinPrice) {
         const exchangeRate = 1000; // نرخ تبدیل: 1000 سکه = 1 دلار
         return (coinPrice / exchangeRate).toFixed(2); // قیمت دلاری با دو رقم اعشار
+    }
+
+    // تابع محاسبه مجموع ارزش دلاری NFTهای کاربر
+    function calculateTotalValue(collection) {
+        const exchangeRate = 1000; // نرخ تبدیل: 1000 سکه = 1 دلار
+        let total = 0;
+        collection.forEach(nft => {
+            const price = nft.number * (nft.name.includes("Rare") ? 500 : 5000); // قیمت بر اساس نوع NFT
+            total += price / exchangeRate;
+        });
+        return total.toFixed(2);
     }
 
     // UI Update functions
@@ -59,8 +71,10 @@ document.addEventListener("DOMContentLoaded", () => {
             const user = userData[currentUser];
             if (currentUser === "admin") {
                 coinCount.textContent = "∞"; // نمایش سکه‌های نامحدود برای ادمین
+                document.getElementById("coin-transfer-btn").style.display = "inline-block"; // نمایش دکمه انتقال سکه
             } else {
                 coinCount.textContent = user.coins;
+                document.getElementById("coin-transfer-btn").style.display = "none"; // مخفی کردن دکمه انتقال سکه
             }
             updateCollection();
         }
@@ -77,6 +91,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
             `)
             .join("");
+
+        // Update total value
+        totalValue.textContent = `$${calculateTotalValue(user.collection)}`;
 
         // Add event listeners to transfer buttons
         document.querySelectorAll(".transfer-btn").forEach(button => {
