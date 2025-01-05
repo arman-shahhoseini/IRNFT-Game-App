@@ -169,8 +169,15 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
 
             const buyBtn = nftCard.querySelector(".buy-btn");
+            const user = userData[currentUser];
+
+            // Check if the NFT is already in the user's collection
+            if (user && user.collection.some(nft => nft.name === name && nft.number === i)) {
+                buyBtn.disabled = true;
+                buyBtn.textContent = "Purchased";
+            }
+
             buyBtn.addEventListener("click", () => {
-                const user = userData[currentUser];
                 if (currentUser === "admin" || user.coins >= price) {
                     if (currentUser !== "admin") {
                         user.coins -= price;
