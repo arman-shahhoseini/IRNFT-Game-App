@@ -115,6 +115,32 @@
                 <button id="cancel-coin-transfer-btn" class="login-btn" style="background: #333;">Cancel</button>
             </div>
         </div>
+
+        <!-- Add Category Modal -->
+        <div id="add-category-modal" class="modal-overlay" style="display: none;">
+            <div class="modal">
+                <h3>Add NFT Category</h3>
+                <input type="text" id="category-name" class="login-input" placeholder="Category Name" required />
+                <input type="number" id="category-price-multiplier" class="login-input" placeholder="Price Multiplier" required />
+                <button id="confirm-add-category-btn" class="login-btn">Add Category</button>
+                <button id="cancel-add-category-btn" class="login-btn" style="background: #333;">Cancel</button>
+            </div>
+        </div>
+
+        <!-- Add NFT Modal -->
+        <div id="add-nft-modal" class="modal-overlay" style="display: none;">
+            <div class="modal">
+                <h3>Add NFT</h3>
+                <select id="nft-category" class="login-input">
+                    <!-- Categories will be populated dynamically -->
+                </select>
+                <input type="text" id="nft-name" class="login-input" placeholder="NFT Name" required />
+                <input type="number" id="nft-number" class="login-input" placeholder="NFT Number" required />
+                <input type="text" id="nft-image" class="login-input" placeholder="NFT Image URL" required />
+                <button id="confirm-add-nft-btn" class="login-btn">Add NFT</button>
+                <button id="cancel-add-nft-btn" class="login-btn" style="background: #333;">Cancel</button>
+            </div>
+        </div>
     </main>
     
     <!-- Navigation -->
@@ -124,7 +150,10 @@
         <button class="nav-item" data-target="shop"><i class="fa fa-store"></i><span>Shop</span></button>
         <button class="nav-item" data-target="collection"><i class="fa fa-box"></i><span>Collection</span></button>
         <!-- Add Transfer Coins Button for Admin -->
-        <button id="coin-transfer-btn" class="nav-item"><i class="fa fa-coins"></i><span>Transfer Coins</span></button>
+        <button id="coin-transfer-btn" class="nav-item" style="display: none;"><i class="fa fa-coins"></i><span>Transfer Coins</span></button>
+        <!-- Add Category and NFT Buttons for Admin -->
+        <button id="add-category-btn" class="nav-item" style="display: none;"><i class="fa fa-plus"></i><span>Add Category</span></button>
+        <button id="add-nft-btn" class="nav-item" style="display: none;"><i class="fa fa-plus"></i><span>Add NFT</span></button>
     </nav>
   </div>
 </body>
