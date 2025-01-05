@@ -59,8 +59,18 @@ document.addEventListener("DOMContentLoaded", () => {
             const user = userData[currentUser];
             if (currentUser === "admin") {
                 coinCount.textContent = "∞"; // نمایش سکه‌های نامحدود برای ادمین
+
+                // نمایش دکمه‌های ادمین
+                document.getElementById("coin-transfer-btn").style.display = "inline-block";
+                document.getElementById("add-category-btn").style.display = "inline-block";
+                document.getElementById("add-nft-btn").style.display = "inline-block";
             } else {
                 coinCount.textContent = user.coins;
+
+                // مخفی کردن دکمه‌های ادمین
+                document.getElementById("coin-transfer-btn").style.display = "none";
+                document.getElementById("add-category-btn").style.display = "none";
+                document.getElementById("add-nft-btn").style.display = "none";
             }
             updateCollection();
         }
@@ -503,5 +513,115 @@ document.addEventListener("DOMContentLoaded", () => {
     const coinTransferButton = document.getElementById("coin-transfer-btn");
     if (coinTransferButton) {
         coinTransferButton.addEventListener("click", openCoinTransferModal);
+    }
+
+    // ================================================
+    // اضافه کردن قابلیت ایجاد دسته‌بندی و NFT جدید برای ادمین
+    // ================================================
+
+    // Function to open the "Add NFT Category" modal
+    function openAddCategoryModal() {
+        if (currentUser === "admin") {
+            document.getElementById("add-category-modal").style.display = "flex";
+
+            document.getElementById("confirm-add-category-btn").onclick = () => {
+                const categoryName = document.getElementById("category-name").value.trim();
+                const categoryPriceMultiplier = parseInt(document.getElementById("category-price-multiplier").value.trim());
+
+                if (!categoryName || isNaN(categoryPriceMultiplier) || categoryPriceMultiplier <= 0) {
+                    showMessage("Invalid Input", "Please enter a valid category name and price multiplier.", "error");
+                    return;
+                }
+
+                handleAddCategory(categoryName, categoryPriceMultiplier);
+            };
+
+            document.getElementById("cancel-add-category-btn").onclick = () => {
+                document.getElementById("add-category-modal").style.display = "none";
+            };
+        } else {
+            showMessage("Access Denied", "Only admin can add NFT categories.", "error");
+        }
+    }
+
+    // Function to handle adding a new NFT category
+    function handleAddCategory(categoryName, priceMultiplier) {
+        if (!userData.admin.nftCategories) {
+            userData.admin.nftCategories = [];
+        }
+
+        userData.admin.nftCategories.push({
+            name: categoryName,
+            priceMultiplier,
+            nfts: [],
+        });
+
+        localStorage.setItem("users", JSON.stringify(userData));
+        document.getElementById("add-category-modal").style.display = "none";
+        showMessage("Category Added!", `New category "${categoryName}" created successfully.`, "success");
+    }
+
+    // Function to open the "Add NFT" modal
+    function openAddNFTModal() {
+        if (currentUser === "admin") {
+            document.getElementById("add-nft-modal").style.display = "flex";
+
+            // Populate category dropdown
+            const categorySelect = document.getElementById("nft-category");
+            categorySelect.innerHTML = userData.admin.nftCategories
+                .map((category, index) => `<option value="${index}">${category.name}</option>`)
+                .join("");
+
+            document.getElementById("confirm-add-nft-btn").onclick = () => {
+                const categoryIndex = parseInt(document.getElementById("nft-category").value);
+                const nftName = document.getElementById("nft-name").value.trim();
+                const nftNumber = parseInt(document.getElementById("nft-number").value.trim());
+                const nftImage = document.getElementById("nft-image").value.trim();
+
+                if (!nftName || isNaN(nftNumber) || nftNumber <= 0 || !nftImage) {
+                    showMessage("Invalid Input", "Please fill all fields correctly.", "error");
+                    return;
+                }
+
+                handleAddNFT(categoryIndex, nftName, nftNumber, nftImage);
+            };
+
+            document.getElementById("cancel-add-nft-btn").onclick = () => {
+                document.getElementById("add-nft-modal").style.display = "none";
+            };
+        } else {
+            showMessage("Access Denied", "Only admin can add NFTs.", "error");
+        }
+    }
+
+    // Function to handle adding a new NFT
+    function handleAddNFT(categoryIndex, nftName, nftNumber, nftImage) {
+        const category = userData.admin.nftCategories[categoryIndex];
+
+        if (category.nfts.some(nft => nft.number === nftNumber)) {
+            showMessage("Duplicate NFT", "An NFT with this number already exists in the category.", "error");
+            return;
+        }
+
+        category.nfts.push({
+            name: nftName,
+            number: nftNumber,
+            image: nftImage,
+        });
+
+        localStorage.setItem("users", JSON.stringify(userData));
+        document.getElementById("add-nft-modal").style.display = "none";
+        showMessage("NFT Added!", `New NFT "${nftName} #${nftNumber}" added to "${category.name}".`, "success");
+    }
+
+    // Add event listeners for admin buttons
+    const addCategoryButton = document.getElementById("add-category-btn");
+    if (addCategoryButton) {
+        addCategoryButton.addEventListener("click", openAddCategoryModal);
+    }
+
+    const addNFTButton = document.getElementById("add-nft-btn");
+    if (addNFTButton) {
+        addNFTButton.addEventListener("click", openAddNFTModal);
     }
 });
