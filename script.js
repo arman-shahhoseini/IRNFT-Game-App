@@ -48,18 +48,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const taskContainer = document.getElementById("task-container");
   const totalValue = document.getElementById("total-value");
 
-  // تابع محاسبه قیمت دلاری NFT
+  // Function to calculate dollar price of NFT
   function calculateDollarPrice(coinPrice) {
-    const exchangeRate = 1000; // نرخ تبدیل: 1000 سکه = 1 دلار
-    return (coinPrice / exchangeRate).toFixed(2); // قیمت دلاری با دو رقم اعشار
+    const exchangeRate = 1000; // Exchange rate: 1000 coins = 1 dollar
+    return (coinPrice / exchangeRate).toFixed(2); // Dollar price with two decimal places
   }
 
-  // تابع محاسبه مجموع ارزش دلاری NFTهای کاربر
+  // Function to calculate total dollar value of user's NFT collection
   function calculateTotalValue(collection) {
-    const exchangeRate = 1000; // نرخ تبدیل: 1000 سکه = 1 دلار
+    const exchangeRate = 1000; // Exchange rate: 1000 coins = 1 dollar
     let total = 0;
     collection.forEach(nft => {
-      const price = nft.number * (nft.name.includes("Rare") ? 500 : 5000); // قیمت بر اساس نوع NFT
+      const price = nft.number * (nft.name.includes("Rare") ? 500 : 5000); // Price based on NFT type
       total += price / exchangeRate;
     });
     return total.toFixed(2);
@@ -70,11 +70,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (currentUser) {
       const user = userData[currentUser];
       if (currentUser === "admin") {
-        coinCount.textContent = "∞"; // نمایش سکه‌های نامحدود برای ادمین
-        document.getElementById("coin-transfer-btn").style.display = "inline-block"; // نمایش دکمه انتقال سکه
+        coinCount.textContent = "∞"; // Display unlimited coins for admin
+        document.getElementById("coin-transfer-btn").style.display = "inline-block"; // Show coin transfer button
       } else {
         coinCount.textContent = user.coins;
-        document.getElementById("coin-transfer-btn").style.display = "none"; // مخفی کردن دکمه انتقال سکه
+        document.getElementById("coin-transfer-btn").style.display = "none"; // Hide coin transfer button
       }
       updateCollection();
     }
@@ -116,8 +116,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // NFT generation function
   function generateNFTs(level) {
     const levels = {
-      rare: { name: "Rare NFTs", priceMultiplier: 500, start: 1, end: 10 }, // قیمت از 500 شروع می‌شود
-      legendary: { name: "Legendary NFTs", priceMultiplier: 5000, start: 11, end: 20 }, // قیمت از 10000 شروع می‌شود
+      rare: { name: "Rare NFTs", priceMultiplier: 500, start: 1, end: 10 },
+      legendary: { name: "Legendary NFTs", priceMultiplier: 5000, start: 11, end: 20 },
     };
 
     const { name, priceMultiplier, start, end } = levels[level];
@@ -125,7 +125,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     for (let i = start; i <= end; i++) {
       const price = i * priceMultiplier;
-      const dollarPrice = calculateDollarPrice(price); // محاسبه قیمت دلاری
+      const dollarPrice = calculateDollarPrice(price);
 
       const nftCard = document.createElement("div");
       nftCard.className = "nft-card";
@@ -243,8 +243,11 @@ document.addEventListener("DOMContentLoaded", () => {
   // Login form handling
   loginForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    const username = document.getElementById("username").value.trim();
-    const password = document.getElementById("password").value.trim();
+    const usernameInput = document.getElementById("username");
+    const passwordInput = document.getElementById("password");
+
+    const username = usernameInput.value.trim().toLowerCase(); // Convert to lowercase
+    const password = passwordInput.value.trim();
 
     if (userData[username]) {
       if (userData[username].password === password) {
@@ -262,24 +265,31 @@ document.addEventListener("DOMContentLoaded", () => {
         loginMessage.textContent = "Incorrect password!";
       }
     } else {
-      userData[username] = {
-        password,
-        coins: 50,
-        collection: [],
-        completedTasks: [],
-        lastCompletionDate: null,
-        lastGameDate: null, // Add last game date for the new user
-      };
-      currentUser = username;
-      localStorage.setItem("users", JSON.stringify(userData));
-      loginMessage.style.color = "#00ffd1";
-      loginMessage.textContent = "Account created successfully!";
-      setTimeout(() => {
-        loginBox.style.display = "none";
-        updateUI();
-        initializeTasks(); // Initialize tasks for the new user
-        generateNFTs("rare"); // Regenerate NFTs to update buttons
-      }, 1000);
+      // Check if a user with the same username exists in different cases
+      const existingUser = Object.keys(userData).find(u => u.toLowerCase() === username);
+      if (existingUser) {
+        loginMessage.style.color = "#ff007a";
+        loginMessage.textContent = "Username already exists!";
+      } else {
+        userData[username] = {
+          password,
+          coins: 50,
+          collection: [],
+          completedTasks: [],
+          lastCompletionDate: null,
+          lastGameDate: null, // Add last game date for the new user
+        };
+        currentUser = username;
+        localStorage.setItem("users", JSON.stringify(userData));
+        loginMessage.style.color = "#00ffd1";
+        loginMessage.textContent = "Account created successfully!";
+        setTimeout(() => {
+          loginBox.style.display = "none";
+          updateUI();
+          initializeTasks(); // Initialize tasks for the new user
+          generateNFTs("rare"); // Regenerate NFTs to update buttons
+        }, 1000);
+      }
     }
   });
 
@@ -293,7 +303,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("transfer-modal").style.display = "flex";
 
     document.getElementById("confirm-transfer-btn").onclick = () => {
-      const recipientUsername = document.getElementById("recipient-username").value.trim();
+      const recipientUsername = document.getElementById("recipient-username").value.trim().toLowerCase(); // Convert to lowercase
       handleNFTTransfer(nftIndex, recipientUsername);
     };
 
@@ -448,7 +458,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initializeTasks();
 
   // ================================================
-  // اضافه کردن قابلیت انتقال سکه برای کاربر admin
+  // Add coin transfer functionality for admin
   // ================================================
 
   // Transfer Coins functionality for admin
@@ -457,8 +467,11 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("coin-transfer-modal").style.display = "flex";
 
       document.getElementById("confirm-coin-transfer-btn").onclick = () => {
-        const recipientUsername = document.getElementById("coin-recipient-username").value.trim();
-        const amount = parseInt(document.getElementById("coin-amount").value.trim());
+        const recipientUsernameInput = document.getElementById("coin-recipient-username");
+        const amountInput = document.getElementById("coin-amount");
+
+        const recipientUsername = recipientUsernameInput.value.trim().toLowerCase(); // Convert to lowercase
+        const amount = parseInt(amountInput.value.trim());
 
         if (!recipientUsername || isNaN(amount) || amount <= 0) {
           showMessage("Invalid Input", "Please enter a valid username and amount.", "error");
