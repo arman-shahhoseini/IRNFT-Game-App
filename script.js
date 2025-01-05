@@ -351,7 +351,14 @@ function handleNFTTransfer(nftIndex, recipientUsername) {
       return;
     }
 
+    // Ensure recipient has a collection array
+    if (!recipient.collection) {
+      recipient.collection = []; // Initialize an empty collection if it doesn't exist
+    }
+
     const nftToTransfer = user.collection[nftIndex];
+
+    // Check if the recipient already owns the NFT
     if (recipient.collection.some(nft => nft.name === nftToTransfer.name && nft.number === nftToTransfer.number)) {
       showMessage("Duplicate NFT", "The recipient already owns this NFT.", "error");
       return;
@@ -371,7 +378,6 @@ function handleNFTTransfer(nftIndex, recipientUsername) {
     showMessage("Transfer Successful", `You have transferred ${nftToTransfer.name} #${nftToTransfer.number} to ${recipientUsername}.`, "success");
   });
 }
-
 // Task completion functionality
 // Task completion functionality
 function initializeTasks() {
