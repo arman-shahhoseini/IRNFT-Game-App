@@ -38,6 +38,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentUser = null;
 
   // DOM elements
+  const loginBox = document.getElementById("login-box");
+  const loginForm = document.getElementById("login-form");
+  const loginMessage = document.getElementById("login-message");
   const coinCount = document.getElementById("coin-count");
   const collectionContainer = document.getElementById("collection-container");
   const shopContainer = document.getElementById("shop-container");
@@ -236,6 +239,49 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   }
+
+  // Login form handling
+  loginForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    if (userData[username]) {
+      if (userData[username].password === password) {
+        currentUser = username;
+        loginMessage.style.color = "#00ffd1";
+        loginMessage.textContent = "Login successful!";
+        setTimeout(() => {
+          loginBox.style.display = "none";
+          updateUI();
+          initializeTasks(); // Initialize tasks for the current user
+          generateNFTs("rare"); // Regenerate NFTs to update buttons
+        }, 1000);
+      } else {
+        loginMessage.style.color = "#ff007a";
+        loginMessage.textContent = "Incorrect password!";
+      }
+    } else {
+      userData[username] = {
+        password,
+        coins: 50,
+        collection: [],
+        completedTasks: [],
+        lastCompletionDate: null,
+        lastGameDate: null, // Add last game date for the new user
+      };
+      currentUser = username;
+      localStorage.setItem("users", JSON.stringify(userData));
+      loginMessage.style.color = "#00ffd1";
+      loginMessage.textContent = "Account created successfully!";
+      setTimeout(() => {
+        loginBox.style.display = "none";
+        updateUI();
+        initializeTasks(); // Initialize tasks for the new user
+        generateNFTs("rare"); // Regenerate NFTs to update buttons
+      }, 1000);
+    }
+  });
 
   // Transfer NFT functionality
   function openTransferModal(button) {
