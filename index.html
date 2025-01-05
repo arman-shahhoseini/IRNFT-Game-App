@@ -4,14 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IRNFT Game App</title>
-  <link rel="icon" href="i.png">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="./i.png">
+  <link rel="stylesheet" href="./styles.css">
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script defer src="script.js"></script>
+  <script defer src="./script.js" type="module"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider/dist/umd/index.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 </head>
 <body>
@@ -31,7 +29,7 @@
     <!-- Header -->
     <header class="app-header">
       <div class="logo-section">
-        <img src="logo.png" alt="IRNFT Logo" class="app-logo" />
+        <img src="./logo.png" alt="IRNFT Logo" class="app-logo" />
       </div>
     </header>
 
@@ -53,7 +51,7 @@
           </li>
           <li class="task-item" data-coins="20">
             <span>Join Telegram Channel</span>
-            <button class="complete-task-btn" onclick="handleCheckbox(this, 'https://t.me/IRNFTCommunity')">+20 Coins</button>
+            <button class="complete-task-btn">+20 Coins</button>
           </li>
           <li class="task-item" data-coins="30">
             <span>Refer a Friend</span>
