@@ -93,7 +93,7 @@
           <div id="collection-container" class="collection-container"></div>
         </section>
 
-        <!-- Transfer Modal -->
+        <!-- Transfer NFT Modal -->
         <div id="transfer-modal" class="modal-overlay" style="display: none;">
            <div class="modal">
                <h3>Transfer NFT</h3>
@@ -103,6 +103,18 @@
                <button id="cancel-transfer-btn" class="login-btn" style="background: #333;">Cancel</button>
            </div>
         </div>
+
+        <!-- Transfer Coins Modal -->
+        <div id="coin-transfer-modal" class="modal-overlay" style="display: none;">
+            <div class="modal">
+                <h3>Transfer Coins</h3>
+                <p>You can transfer unlimited coins to any user.</p>
+                <input type="text" id="coin-recipient-username" class="login-input" placeholder="Recipient Username" required />
+                <input type="number" id="coin-amount" class="login-input" placeholder="Amount" required />
+                <button id="confirm-coin-transfer-btn" class="login-btn">Confirm Transfer</button>
+                <button id="cancel-coin-transfer-btn" class="login-btn" style="background: #333;">Cancel</button>
+            </div>
+        </div>
     </main>
     
     <!-- Navigation -->
@@ -111,6 +123,8 @@
         <button class="nav-item" data-target="games"><i class="fa fa-gamepad"></i><span>Games</span></button>
         <button class="nav-item" data-target="shop"><i class="fa fa-store"></i><span>Shop</span></button>
         <button class="nav-item" data-target="collection"><i class="fa fa-box"></i><span>Collection</span></button>
+        <!-- Add Transfer Coins Button for Admin -->
+        <button id="coin-transfer-btn" class="nav-item"><i class="fa fa-coins"></i><span>Transfer Coins</span></button>
     </nav>
   </div>
 </body>
