@@ -732,3 +732,54 @@ body {
 .modal button#cancel-transfer-btn {
     background-color: #ff007a;
 }
+
+/* استایل کلی برای بخش مجموع ارزش دلاری */
+.collection-summary {
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: linear-gradient(135deg, #1e1e2f, #2a2a40);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* استایل متن "Total Value" */
+.collection-summary p {
+    font-size: 18px;
+    font-weight: 600;
+    color: #eaeaea;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* استایل مقدار دلاری */
+#total-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #00ffd1; /* رنگ نئونی */
+    background: linear-gradient(90deg, #00ffd1, #00b8a9);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+    margin-top: 10px;
+    animation: glow 1.5s infinite alternate;
+}
+
+/* افکت نئونی برای مقدار دلاری */
+@keyframes glow {
+    0% {
+        text-shadow: 0 0 5px #00ffd1, 0 0 10px #00ffd1, 0 0 20px #00ffd1;
+    }
+    100% {
+        text-shadow: 0 0 10px #00ffd1, 0 0 20px #00ffd1, 0 0 30px #00ffd1;
+    }
+}
+
+/* افکت hover برای کل بخش */
+.collection-summary:hover {
+    transform: translateY(-5px);
+    transition: transform 0.3s ease;
+    box-shadow: 0 8px 25px rgba(0, 255, 209, 0.4);
+}
