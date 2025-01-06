@@ -385,7 +385,7 @@ function handleNFTTransfer(nftIndex, recipientUsername) {
     showMessage("Transfer Successful", `You have transferred ${nftToTransfer.name} #${nftToTransfer.number} to ${recipientUsername}.`, "success");
   });
 }
-// Task completion functionality
+
 // Task completion functionality
 function initializeTasks() {
   if (!currentUser) return; // Ensure a user is logged in
@@ -456,6 +456,32 @@ function initializeTasks() {
     });
   });
 }
+
+// Function to check if tasks should be reset
+function checkTaskReset() {
+  if (!currentUser) return; // Ensure a user is logged in
+  const user = userData[currentUser];
+
+  const currentTime = new Date();
+  const resetTime = new Date();
+  resetTime.setHours(4, 0, 0, 0); // Reset at 4:00 a.m.
+
+  const lastCompletionDate = user.lastCompletionDate ? new Date(user.lastCompletionDate) : null;
+
+  if (!lastCompletionDate || (currentTime > resetTime && lastCompletionDate.toDateString() !== currentTime.toDateString())) {
+    user.completedTasks = []; // Reset completed tasks
+    user.lastCompletionDate = currentTime.toISOString(); // Update last completion date
+    set(ref(database, "users/" + currentUser), user); // Save updated user data to Firebase
+    initializeTasks(); // Reinitialize tasks after reset
+  }
+}
+
+// Check task reset on page load
+checkTaskReset();
+
+// Periodically check task reset (every hour)
+setInterval(checkTaskReset, 60 * 60 * 1000);
+
 // Game Logic (Coin Miner)
 const gameArea = document.getElementById("game-area");
 const timeLeftDisplay = document.getElementById("time-left");
